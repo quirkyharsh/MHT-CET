@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Predict Cutoff</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: linear-gradient(135deg, #1e293b, #0f172a);
+            color: #f1f5f9;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 24px;
+        }
+        .card {
+            background: #1e293b;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+            max-width: 480px;
+            width: 100%;
+        }
+        h1 {
+            font-size: 24px;
+            margin-bottom: 24px;
+            text-align: center;
+        }
+        label {
+            display: block;
+            margin-bottom: 6px;
+            font-size: 14px;
+            color: #94a3b8;
+        }
+        select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 18px;
+            border-radius: 6px;
+            border: 1px solid #334155;
+            background: #0f172a;
+            color: #f1f5f9;
+            font-size: 14px;
+        }
+        button {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            background: #6366f1;
+            color: white;
+            font-weight: 600;
+            font-size: 15px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        button:hover {
+            background: #4f46e5;
+        }
+        .result {
+            margin-top: 24px;
+            padding: 18px;
+            background: #0f172a;
+            border-radius: 8px;
+            text-align: center;
+            border: 1px solid #6366f1;
+        }
+        .result .score {
+            font-size: 32px;
+            font-weight: 700;
+            color: #a5b4fc;
+        }
+        .result p {
+            margin: 4px 0 0;
+            color: #94a3b8;
+            font-size: 13px;
+        }
+        .error {
+            margin-top: 24px;
+            padding: 16px;
+            background: #2a1215;
+            border: 1px solid #ef4444;
+            border-radius: 8px;
+            color: #fca5a5;
+            font-size: 14px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h1>Predict Your Cutoff Percentile</h1>
+        <form action="{{ url_for('predict_datapoint') }}" method="post">
+
+            <label for="college_name">College</label>
+            <select name="college_name" id="college_name" required>
+                {% for college in college_names %}
+                <option value="{{ college }}">{{ college }}</option>
+                {% endfor %}
+            </select>
+
+            <label for="branch">Branch</label>
+            <select name="branch" id="branch" required>
+                {% for branch in branches %}
+                <option value="{{ branch }}">{{ branch }}</option>
+                {% endfor %}
+            </select>
+
+            <label for="seat_type">Category (Seat Type)</label>
+            <select name="seat_type" id="seat_type" required>
+                {% for seat_type in seat_types %}
+                <option value="{{ seat_type }}">{{ seat_type }}</option>
+                {% endfor %}
+            </select>
+
+            <label for="score_type">Score Type</label>
+            <select name="score_type" id="score_type" required>
+                {% for score_type in score_types %}
+                <option value="{{ score_type }}">{{ score_type }}</option>
+                {% endfor %}
+            </select>
+
+            <button type="submit">Predict Cutoff</button>
+        </form>
+
+        {% if results is not none %}
+        <div class="result">
+            <div class="score">{{ results }}</div>
+            <p>Estimated minimum percentile required</p>
+        </div>
+        {% endif %}
+
+        {% if error %}
+        <div class="error">{{ error }}</div>
+        {% endif %}
+    </div>
+</body>
+</html>
